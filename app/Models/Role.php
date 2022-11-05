@@ -19,4 +19,19 @@ class Role extends Model
         'name',
         'company_id'
     ];
+
+    public function companies()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function responsibilities()
+    {
+        return $this->hasMany(Responsibility::class);
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }
