@@ -75,4 +75,18 @@ class UserController extends Controller
             return ResponseFormatter::error($error->getMessage());
         }
     }
+
+    public function logout(Request $request)
+    {
+        $token = $request->user()->currentAccessToken()->delete();
+
+        return ResponseFormatter::success($token, 'Logout Success');
+    }
+
+    public function fetch(Request $request)
+    {
+        $user = $request->user();
+
+        return ResponseFormatter::success($user, 'Fetch Success');
+    }
 }
