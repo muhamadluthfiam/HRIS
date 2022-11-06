@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
+use App\Http\Requests\CreateCompanyRequest;
 use App\Models\Company;
+use Exception;
 
 class CompanyController extends Controller
 {
@@ -37,5 +39,28 @@ class CompanyController extends Controller
             $companies->paginate($limit),
             'Companies Found'
         );
+    }
+
+    public function create(CreateCompanyRequest $request)
+    {
+        try {
+
+            if($request->hasFile('logo')) {
+                $path = $request->file('logo')->store('public/logos');
+            }
+
+
+            $company = Company::create([
+                'name' => $request->name,
+                'logo' => $request->$path
+            ]);
+
+            return ResponseFormatter::success($company, 'Company created');
+
+        } catch (Exception $error) {
+            return ResponseFormatter::error($error->getMessage(), 500);
+        }
+
+        
     }
 }
